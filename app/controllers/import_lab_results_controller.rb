@@ -1,6 +1,6 @@
 class ImportLabResultsController < ApplicationController
   def new
-    @import_record = ImportRecord.new
+    @medical_record = MedicalRecord.new
   end
 
   def create
@@ -19,18 +19,18 @@ class ImportLabResultsController < ApplicationController
       file.write(uploaded_file.read)
     end
 
-    import_record = ImportRecord.create!(
+    medical_record = MedicalRecord.create!(
       filename: uploaded_file.original_filename,
       status: 'pending'
     )
 
     # Enqueue background job
-    ImportLabResultsJob.perform_later(import_record.id, temp_file)
+    ImportLabResultsJob.perform_later(medical_record.id, temp_file)
 
-    redirect_to action: :show, id: import_record.id, notice: "File uploaded successfully. Processing in background..."
+    redirect_to action: :show, id: medical_record.id, notice: "File uploaded successfully. Processing in background..."
   end
 
   def show
-    @import_record = ImportRecord.find(params[:id])
+    @medical_record = MedicalRecord.find(params[:id])
   end
 end

@@ -2,7 +2,7 @@ class ImportLabResultsJob < ApplicationJob
   queue_as :default
 
   def perform(import_record_id, file_path)
-    import_record = ImportRecord.find(import_record_id)
+    import_record = MedicalRecord.find(import_record_id)
     import_record.update!(status: "processing")
 
     begin

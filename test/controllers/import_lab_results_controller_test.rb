@@ -20,14 +20,14 @@ class ImportLabResultsControllerTest < ActionDispatch::IntegrationTest
 
     file = fixture_file_upload("test_hl7.txt", "text/plain")
 
-    assert_difference "ImportRecord.count", 1 do
+    assert_difference "MedicalRecord.count", 1 do
       post "/import_lab_results", params: { file: file }
     end
 
-    import_record = ImportRecord.last
+    medical_record = MedicalRecord.last
     assert_response :redirect
-    assert_equal "pending", import_record.status
-    assert_equal "test_hl7.txt", import_record.filename
+    assert_equal "pending", medical_record.status
+    assert_equal "test_hl7.txt", medical_record.filename
   ensure
     File.delete(file_path) if File.exist?(file_path)
   end

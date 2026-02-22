@@ -3,31 +3,31 @@
 
   <div class="status-card">
     <div class="status-header">
-      <h2><%= @import_record.filename %></h2>
-      <span class="status-badge status-<%= @import_record.status %>">
-        <%= @import_record.status.upcase %>
+      <h2><%= @medical_record.filename %></h2>
+      <span class="status-badge status-<%= @medical_record.status %>">
+        <%= @medical_record.status.upcase %>
       </span>
     </div>
 
     <div class="status-details">
       <p>
-        <strong>Import ID:</strong> <%= @import_record.id %>
+        <strong>Import ID:</strong> <%= @medical_record.id %>
       </p>
       <p>
-        <strong>Upload Time:</strong> <%= @import_record.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+        <strong>Upload Time:</strong> <%= @medical_record.created_at.strftime("%B %d, %Y at %I:%M %p") %>
       </p>
       <p>
-        <strong>Records Processed:</strong> <%= @import_record.records_processed %>
+        <strong>Records Processed:</strong> <%= @medical_record.records_processed %>
       </p>
 
-      <% if @import_record.error_message.present? %>
+      <% if @medical_record.error_message.present? %>
         <div class="error-message">
-          <strong>Error:</strong> <%= @import_record.error_message %>
+          <strong>Error:</strong> <%= @medical_record.error_message %>
         </div>
       <% end %>
     </div>
 
-    <% if @import_record.status == "pending" || @import_record.status == "processing" %>
+    <% if @medical_record.status == "pending" || @medical_record.status == "processing" %>
       <div class="info-box">
         <em>Processing file... Page will refresh automatically.</em>
       </div>
@@ -35,7 +35,7 @@
         // Auto-refresh page every 2 seconds while processing
         setTimeout(() => location.reload(), 2000);
       </script>
-    <% elsif @import_record.status == "completed" %>
+    <% elsif @medical_record.status == "completed" %>
       <div class="success-box">
         ✓ File imported successfully!
       </div>
