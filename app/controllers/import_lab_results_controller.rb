@@ -21,7 +21,7 @@ class ImportLabResultsController < ApplicationController
 
     medical_record = MedicalRecord.create!(
       filename: uploaded_file.original_filename,
-      status: 'pending'
+      status: "pending"
     )
 
     # Enqueue background job

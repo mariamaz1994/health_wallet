@@ -21,21 +21,23 @@ class Hl7Parser
     current_patient = nil
     current_assessment = nil
 
-    File.foreach(@file_path) do |line|
-      clean_line = line.strip
-      next if clean_line.empty?
+    ActiveRecord::Base.transaction do
+      File.foreach(@file_path) do |line|
+        clean_line = line.strip
+        next if clean_line.empty?
 
-      if patient_header?(clean_line)
-        parts = clean_line.split("|")
-        if parts.length >= 4
-          current_patient = find_or_create_patient(parts[0], parts[1], parts[2])
-          current_assessment = find_or_create_assessment(current_patient, parts[3])
-          @records_processed += 1 if current_assessment
-        end
-      elsif observation_line?(clean_line) && current_assessment
-        parts = clean_line.split("|")
-        if parts.length >= 3 && OBSERVATION_CODES.key?(parts[0])
-          find_or_create_observation(current_assessment, parts[0], parts[1].to_f, parts[2])
+        if patient_header?(clean_line)
+          parts = clean_line.split("|")
+          if parts.length >= 4
+            current_patient = find_or_create_patient(parts[0], parts[1], parts[2])
+            current_assessment = find_or_create_assessment(current_patient, parts[3])
+            @records_processed += 1 if current_assessment
+          end
+        elsif observation_line?(clean_line) && current_assessment
+          parts = clean_line.split("|")
+          if parts.length >= 3 && OBSERVATION_CODES.key?(parts[0])
+            find_or_create_observation(current_assessment, parts[0], parts[1].to_f, parts[2])
+          end
         end
       end
     end
@@ -58,7 +60,7 @@ class Hl7Parser
   end
 
   def valid_date?(date_str)
-    parsed_date = Date.strptime(date_str, '%Y-%m-%d')
+    parsed_date = Date.strptime(date_str, "%Y-%m-%d")
 
     parsed_date.year.between?(1900, 2100)
   rescue ArgumentError, TypeError
@@ -66,8 +68,8 @@ class Hl7Parser
   end
 
   def find_or_create_patient(name, dob_str, sex_at_birth)
-    dob = Date.strptime(dob_str, '%Y-%m-%d')
-   
+    dob = Date.strptime(dob_str, "%Y-%m-%d")
+
     Patient.find_or_create_by!(
       name: name,
       dob: dob,

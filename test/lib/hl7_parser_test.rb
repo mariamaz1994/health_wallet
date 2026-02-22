@@ -12,15 +12,15 @@ class Hl7ParserTest < ActiveSupport::TestCase
 
   test "should parse single patient with observations" do
     File.write(@test_file, "John Doe|1985-03-15|M|REF-2024-001\n8480-6|120|mmHg\n8462-4|80|mmHg\n")
-    
+
     parser = Hl7Parser.new(@test_file)
     records_count = parser.parse_and_import
-    
+
     patient = Patient.find_by(name: "John Doe")
     assert patient
     assert_equal Date.parse("1985-03-15"), patient.dob
     assert_equal "M", patient.sex_at_birth
-    
+
     assessment = patient.assessments.find_by(reference: "REF-2024-001")
     assert assessment
     assert_equal 2, assessment.observations.count
@@ -44,10 +44,10 @@ class Hl7ParserTest < ActiveSupport::TestCase
     )
 
     File.write(@test_file, "Jane Smith|1990-07-22|F|REF-2024-002\n8480-6|120|mmHg\n")
-    
+ 
     parser = Hl7Parser.new(@test_file)
     records_count = parser.parse_and_import
-    
+
     observation.reload
     assert_equal 120.0, observation.value
     assert_equal "mmHg", observation.units
@@ -58,7 +58,7 @@ class Hl7ParserTest < ActiveSupport::TestCase
     content += "2093-3|190|mg/dL\n"
     content += "Jane Smith|1990-07-22|F|REF-2024-002\n"
     content += "8480-6|118|mmHg\n"
-    
+
     File.write(@test_file, content)
     
     parser = Hl7Parser.new(@test_file)
