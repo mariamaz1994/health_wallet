@@ -24,6 +24,9 @@ class ImportLabResultsController < ApplicationController
       status: 'pending'
     )
 
+    # Enqueue background job
+    ImportLabResultsJob.perform_later(import_record.id, temp_file)
+
     redirect_to action: :show, id: import_record.id, notice: "File uploaded successfully. Processing in background..."
   end
 
