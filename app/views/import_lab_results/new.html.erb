@@ -1,0 +1,46 @@
+<div class="container">
+  <h1>Upload Lab Results</h1>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <% if flash[:notice] %>
+    <div class="alert alert-success">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+  
+  <div class="form-container">
+    <%= form_with url: import_lab_results_path, method: :post, local: true, multipart: true do |form| %>
+      <div class="form-group">
+        <label for="file">Select HL7 Laboratory Results File:</label>
+        <%= form.file_field :file, accept: ".txt", class: "form-control" %>
+        <small class="form-text text-muted">
+          Accepted format: HL7 text files (.txt)
+        </small>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Upload File", class: "btn btn-primary" %>
+        <%= link_to "Cancel", root_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="info-section">
+    <h3>File Format Requirements</h3>
+    <p>Your HL7 file should follow this format:</p>
+    <pre>patient_name|patient_dob|patient_sex_at_birth|assessment_reference
+code|result|units
+code|result|units
+...</pre>
+    
+    <h4>Example:</h4>
+    <pre>John Doe|1985-03-15|M|REF-2024-001
+8480-6|120|mmHg
+8462-4|80|mmHg</pre>
+  </div>
+</div>

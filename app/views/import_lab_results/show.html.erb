@@ -1,0 +1,49 @@
+<div class="container">
+  <h1>Import Status</h1>
+
+  <div class="status-card">
+    <div class="status-header">
+      <h2><%= @medical_record.filename %></h2>
+      <span class="status-badge status-<%= @medical_record.status %>">
+        <%= @medical_record.status.upcase %>
+      </span>
+    </div>
+
+    <div class="status-details">
+      <p>
+        <strong>Import ID:</strong> <%= @medical_record.id %>
+      </p>
+      <p>
+        <strong>Upload Time:</strong> <%= @medical_record.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+      </p>
+      <p>
+        <strong>Records Processed:</strong> <%= @medical_record.records_processed %>
+      </p>
+
+      <% if @medical_record.error_message.present? %>
+        <div class="error-message">
+          <strong>Error:</strong> <%= @medical_record.error_message %>
+        </div>
+      <% end %>
+    </div>
+
+    <% if @medical_record.status == "pending" || @medical_record.status == "processing" %>
+      <div class="info-box">
+        <em>Processing file... Page will refresh automatically.</em>
+      </div>
+      <script>
+        // Auto-refresh page every 2 seconds while processing
+        setTimeout(() => location.reload(), 2000);
+      </script>
+    <% elsif @medical_record.status == "completed" %>
+      <div class="success-box">
+        ✓ File imported successfully!
+      </div>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= link_to "Upload Another File", new_import_lab_result_path, class: "btn btn-primary" %>
+    <%= link_to "Back to Home", "/", class: "btn btn-secondary" %>
+  </div>
+</div>

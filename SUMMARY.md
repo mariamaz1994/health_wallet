@@ -1,0 +1,2 @@
+Agentic programmed the views and the styling of the UI for the new page to import medical records for the customers.
+I have also used AI for the functionality to go through each line in the file provided and used agentic programming to add on the tests.
